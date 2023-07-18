@@ -59,8 +59,6 @@ Route::middleware(['auth','user-role:publisher'])->group(function()
     Route::get('/NewAd', [App\Http\Controllers\pagesController::class, 'NewAd'])->name('NewAd');
     Route::post("/createAd", [App\Http\Controllers\adminController::class, 'createAd'])->name('createAd');
     Route::get('/get-category', [App\Http\Controllers\adminController::class,'getCategory']);
-
-    
 });
 
 // Publisher Routes
@@ -68,6 +66,9 @@ Route::middleware(['auth','user-role:subscriber'])->group(function()
 {
 
     Route::get('/ashtrays', [App\Http\Controllers\pagesController::class, 'showAshtrays'])->name('ashtrays.show');
+    Route::post("/CreateReport", [App\Http\Controllers\ReportController::class, 'CreateReport'])->name('CreateReport');
+    Route::post("/BreakdownAlert", [App\Http\Controllers\BreakdownController::class, 'BreakdownAlert'])->name('BreakdownAlert');
+
 
 });
 

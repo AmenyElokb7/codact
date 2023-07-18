@@ -39,7 +39,6 @@ public function createUser(Request $request)
         'message' => 'Publisher added successfully',
         'alert-type' => 'success'
     );
-
     return redirect()->back()->with($notification);
 }
 
@@ -57,8 +56,6 @@ public function createUser(Request $request)
             }
         }
     }
-
-
 
     public function deletePublisher($id)
     {
