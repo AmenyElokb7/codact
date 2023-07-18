@@ -35,7 +35,13 @@ Route::middleware(['auth','user-role:admin'])->group(function()
     Route::post('admin/ads/{id}/reject', 'App\Http\Controllers\pagesController@rejectAd')->name('admin.ads.reject');
     Route::get('/dashboard', [App\Http\Controllers\pagesController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('admin/advertisements/{id}', 'App\Http\Controllers\adminController@show')->name('admin.advertisements.show');
-
+    Route::get('/advertisements/{id}/pause', 'App\Http\Controllers\adminController@pause')->name('pause-ad');
+    Route::get('/advertisements/{id}/resume', 'App\Http\Controllers\adminController@resume')->name('resume-ad');
+    Route::get('/categories', 'App\Http\Controllers\pagesController@adminCategories')->name('admin.categories');
+    Route::post('/categoryCreate', 'App\Http\Controllers\adminController@createCategory')->name('admin.category.create');
+    Route::get('/categories/{category}/edit', 'App\Http\Controllers\adminController@editCategory')->name('categories.edit');
+    Route::delete('/categories/{category}', 'App\Http\Controllers\adminController@destroyCategory')->name('categories.destroy');
+ 
 // Roles
     Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index');
     Route::get('/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
@@ -51,6 +57,8 @@ Route::middleware(['auth','user-role:admin'])->group(function()
     Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('admin.permissions.update');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('admin.permissions.destroy');
 });
+Route::get('admin/Notifications', 'App\Http\Controllers\pagesController@NotificationsAdmin')->name('notifications');
+
 // Publisher Routes
 Route::middleware(['auth','user-role:publisher'])->group(function()
 {
@@ -59,15 +67,22 @@ Route::middleware(['auth','user-role:publisher'])->group(function()
     Route::get('/NewAd', [App\Http\Controllers\pagesController::class, 'NewAd'])->name('NewAd');
     Route::post("/createAd", [App\Http\Controllers\adminController::class, 'createAd'])->name('createAd');
     Route::get('/get-category', [App\Http\Controllers\adminController::class,'getCategory']);
+    Route::get('/filtered-ads', 'App\Http\Controllers\adminController@filteredAds')->name('filteredAds');
 
     
 });
 
-// Publisher Routes
+// Subscriber Routes
 Route::middleware(['auth','user-role:subscriber'])->group(function()
 {
 
     Route::get('/ashtrays', [App\Http\Controllers\pagesController::class, 'showAshtrays'])->name('ashtrays.show');
+    Route::get('/subscriber/ads', 'App\Http\Controllers\pagesController@subscriberAds')->name('subscriber.ads');
+    Route::post('/send-ashtray-breakdown-notification', [App\Http\Controllers\adminController::class, 'sendAshtrayBreakdownNotification'])
+    ->name('sendAshtrayBreakdownNotification');
+
+Route::post('/send-new-claim-notification', [App\Http\Controllers\adminController::class, 'sendNewClaimNotification'])
+    ->name('sendNewClaimNotification');
 
 });
 

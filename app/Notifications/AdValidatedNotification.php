@@ -43,7 +43,7 @@ class AdValidatedNotification extends Notification
      */
     public function toArray($notifiable)
     {
-        $cafeName = $this->ad->cafeOwner->cafeName; 
+        $cafeName = $this->ad->cafeOwners->pluck('cafeName')->implode(', ');
 
         return [
             'ad_id' => $this->ad->id,

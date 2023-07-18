@@ -1,5 +1,6 @@
+<?php use Carbon\Carbon;
+?>
 @extends('admin.dashboard')
-
 @section('admin')
     <div class="page-content">
         <div class="container-fluid">
@@ -45,6 +46,7 @@
                                                 <th>Time</th>
                                                 <th>Period</th>
                                                 <th>Cost</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -54,13 +56,22 @@
 
                                                     <td>{{ $ad->id }}</td>
                                                     <td>{{ $ad->user->name }}</td>
-                                                    <td>{{$ad->cafeOwner->cafeName}}</td>
+                                                    <td>
+                                                        @foreach ($ad->cafeOwners as $cafeOwner)
+                                                          <span class="badge bg-success">
+                                                            {{ $cafeOwner->cafeName }}  </span>  
+                                                        @endforeach
+                                                    </td>
                                                     <td><a href="storage/{{ $ad->video }}">Open Ad</a></td>
                                                     <td>{{ $ad->startdate }}</td>
                                                     <td>{{ $ad->enddate }}</td>
                                                     <td>{{ $ad->time }}</td>
                                                     <td> @if ($ad->period==1) {{ $ad->period }} Day @else {{ $ad->period }} Days @endif </td>
                                                     <td>{{ $ad->cost }}</td>
+                                                    <?php $currentDate = Carbon::now();
+                                                    $formattedDate = $currentDate->format('Y-m-d');?>
+                                                    <td> @if($formattedDate> $ad->enddate) <i class="fas fa-toggle-off" style="color: rgb(79, 79, 79)"> </i> Desactivate @else <i class="fas fa-toggle-on" style="color: rgb(61, 255, 61)"> </i> Active @endif </td>
+                                                   
                                                     <td>
                                                         <div class="d-flex gap-2">
                                                         <form action="{{ route('admin.ads.validate', $ad->id) }}" method="POST">

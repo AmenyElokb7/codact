@@ -47,6 +47,9 @@
                                             <th>Café Name</th>
                                             <th>Category</th>
                                             <th>Age Range</th>
+                                            <th>Status</th>
+                                            <th>Best time</th>
+                                            <th>People's category</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -74,8 +77,24 @@
                                                 <td>{{ $subscriber->address }}</td>
                                                 <td>{{ $subscriber->phoneno }}</td>
                                                 <td>{{ $subscriber->cafeName }}</td>
-                                                <td>{{ $subscriber->cafeCategory }}</td>
+                                                <td>{{ $subscriber->category->name }}</td>
                                                 <td>[ {{ $subscriber->minAge }} , {{ $subscriber->maxAge }} ]</td>
+                                                <td>
+                                                    @php
+                                                        $opentime = \Carbon\Carbon::createFromTimestamp(strtotime($subscriber->Opentime));
+                                                        $closetime = \Carbon\Carbon::createFromTimestamp(strtotime($subscriber->Closetime));
+                                                        $current_time = \Carbon\Carbon::now();
+                                                    @endphp
+                                                
+                                                    @if($current_time->between($opentime, $closetime))
+                                                       <span class="badge bg-success">Open</span> 
+                                                    @else
+                                                        <span class="badge bg-danger">Close</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $subscriber->Besttime}}</td>
+                                                <td>{{$subscriber->profession}}</td>
+                                                
 
                                                 <td style="white-space:nowrap">
                                                     <a id="Edit" class="btn btn-success"
@@ -298,11 +317,11 @@
                                 class="col-md-4 col-form-label text-md-end">{{ __("Cafe's Category") }}</label>
 
                             <div class="col-md-6">
-                                <select name="cafeCategory" id="cafeCategory" class="form-select" required>
+                                <select name="cafeCategory" id="cafeCategory" class="form-select select2" required>
                                     <option value="">Select Category</option>
-                                    <option value="lounge">Lounge</option>
-                                    <option value="caferesto">Café Resto</option>
-                                    <option value="cafe">Cafe</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -353,6 +372,30 @@
                                         document.getElementById("maxAgeValue").textContent = maxAgeValue;
                                     }
                                 </script>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tables" class="col-md-4 col-form-label text-md-end">People's type</label>
+                            <div class="col-md-6">
+                                <input id="profession" type="text" class="form-control" name="profession" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tables" class="col-md-4 col-form-label text-md-end">Open</label>
+                            <div class="col-md-6">
+                                <input id="Opentime" type="time" class="form-control" name="Opentime" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tables" class="col-md-4 col-form-label text-md-end">Close</label>
+                            <div class="col-md-6">
+                                <input id="Closetime" type="time" class="form-control" name="Closetime" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tables" class="col-md-4 col-form-label text-md-end">Best time</label>
+                            <div class="col-md-6">
+                                <input id="Besttime" type="time" class="form-control" name="Besttime" required>
                             </div>
                         </div>
 

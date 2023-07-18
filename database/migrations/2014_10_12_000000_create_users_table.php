@@ -21,9 +21,13 @@ return new class extends Migration
             $table->string('address');
             $table->string('phoneno');
             $table->string('cafeName')->nullable();
-            $table->string('cafeCategory')->nullable();
+            $table->unsignedBigInteger('cafeCategory')->nullable();
             $table->integer('minAge')->nullable();
             $table->integer('maxAge')->nullable();
+            $table->string('profession')->nullable();
+            $table->time('Opentime')->nullable();
+            $table->time('Closetime')->nullable();
+            $table->time('Besttime')->nullable();
             $table->integer('tablesno')->nullable();
             $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();

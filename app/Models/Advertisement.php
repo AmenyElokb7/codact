@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Advertisement extends Model
 {
     protected $fillable = [
-        'cafe_owner_id',
         'user_id',
         'video',
         'startdate',
@@ -24,9 +23,8 @@ class Advertisement extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function cafeOwner()
+    public function cafeOwners()
     {
-        return $this->belongsTo(User::class, 'cafe_owner_id');
+        return $this->belongsToMany(User::class, 'advertisement_cafe_owner', 'advertisement_id', 'cafe_owner_id');
     }
 }
-

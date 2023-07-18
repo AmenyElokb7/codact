@@ -29,10 +29,18 @@ class User extends Authenticatable
         'cafeCategory',
         'minAge',
         'maxAge',
+        'profession',
+        'Opentime',
+        'Closetime',
+        'Besttime',
         'tablesno',
         'image',
         'password',
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'cafeCategory');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

@@ -2,8 +2,6 @@
 
 namespace App\Notifications;
 
-namespace App\Notifications;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -18,7 +16,7 @@ class AdRejectedNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param  \App\Models\Ad  $ad
+     * @param  \App\Models\Advertisement  $ad
      * @return void
      */
     public function __construct($ad)
@@ -34,22 +32,7 @@ class AdRejectedNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->line('Your ad has been rejected.')
-            ->line('Reason: ' . $this->ad->rejection_reason)
-            ->action('Edit Ad', url('/ads/'.$this->ad->id.'/edit'))
-            ->line('Thank you for using our application!');
+        return ['database'];
     }
 
     /**
@@ -60,10 +43,12 @@ class AdRejectedNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        $cafeName = $this->ad->cafeOwners->pluck('cafeName')->implode(', ');
+
         return [
             'ad_id' => $this->ad->id,
-            'message' => 'Your ad has been rejected.',
+            'message' => "Your ad for the cafe '{$cafeName}' has been Rejected.",
+            'title' => "Ad Rejected"
         ];
     }
 }
-

@@ -57,7 +57,12 @@
                                         @foreach ($ads as $ad)
                                             <tr>
                                                 <td>#{{ $value++ }} </td>
-                                                <td>{{ $ad->cafeOwner->cafeName }}</td>
+                                                <td>
+                                                    @foreach ($ad->cafeOwners as $cafeOwner)
+                                                      <span class="badge bg-success">
+                                                        {{ $cafeOwner->cafeName }}  </span>  
+                                                    @endforeach
+                                                </td>
                                                 <td>{{ $ad->startdate }}</td>
                                                 <td>{{ $ad->enddate }}</td>
                                                 <td>{{ $ad->time }}</td>
@@ -310,10 +315,10 @@
                         <div class="row mb-3">
                             <label for="email"
                                 class="col-md-4 col-form-label text-md-end">{{ __("Cafe's Category") }}</label>
-                          
+
                             <div class="col-md-6">
-                                <select name="cafeCategory" id="cafeCategory "
-                                    class="form-select selectpicker" required multiple>
+                                <select name="cafeCategory" id="cafeCategory " class="form-select selectpicker" required
+                                    multiple>
                                     <option value="">Select Category</option>
                                     <option value="lounge">Lounge</option>
                                     <option value="caferesto">Café Resto</option>

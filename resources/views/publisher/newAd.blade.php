@@ -21,10 +21,10 @@
                                                 });
                                             </script>
                                             <label class="form-label">Cafe's Name</label>
-                                            <select name="cafeName" id="cafeNameSelect" class="select2 form-select select2-multiple"
-                                                multiple required>
+                                            <select name="cafeName[]" id="cafeNameSelect"
+                                                class="select2 form-select select2-multiple" multiple required>
                                                 <option>Select</option>
-                                                @foreach ($cafe as $item)
+                                                @foreach ($filteredCafes as $item)
                                                     <option data-cafeownerid="{{ $item->id }}"
                                                         value="{{ $item->cafeName }}">{{ $item->cafeName }}</option>
                                                 @endforeach
@@ -130,9 +130,14 @@
                             }
 
                             function updateCafeOwnerId() {
-                                var selectedCafeName = $('#cafeNameSelect').val()[0];
-                                var cafeOwnerId = $('#cafeNameSelect option:selected').data('cafeownerid');
-                                $('#cafeOwnerId').val(cafeOwnerId);
+                                var selectedCafeNames = $('#cafeNameSelect').val();
+                                var cafeOwnerIds = [];
+                                selectedCafeNames.forEach(function(cafeName) {
+                                    var cafeOwnerId = $('#cafeNameSelect option[value="' + cafeName + '"]').data(
+                                        'cafeownerid');
+                                    cafeOwnerIds.push(cafeOwnerId);
+                                });
+                                $('#cafeOwnerId').val(cafeOwnerIds.join(','));
                             }
 
                             function updateCostField() {

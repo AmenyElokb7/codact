@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('advertisements', function (Blueprint $table) {
-            $table->engine='innodb';
+            $table->engine = 'innodb';
             $table->id();
-            $table->unsignedBigInteger('cafe_owner_id');
             $table->unsignedBigInteger('user_id');
             $table->string('video');
             $table->date('startdate');
@@ -27,10 +26,19 @@ return new class extends Migration
             $table->string('status');
             $table->timestamps();
         
-            $table->foreign('cafe_owner_id')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
         
+        Schema::create('advertisement_cafe_owner', function (Blueprint $table) {
+            $table->engine = 'innodb';
+            $table->unsignedBigInteger('advertisement_id');
+            $table->unsignedBigInteger('cafe_owner_id');
+            
+            $table->foreign('advertisement_id')->references('id')->on('advertisements')->onDelete('cascade');
+            $table->foreign('cafe_owner_id')->references('id')->on('users')->onDelete('cascade');
+            
+            $table->primary(['advertisement_id', 'cafe_owner_id']);
+        });
     }
 
     /**
@@ -40,6 +48,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('advertisement_cafe_owner');
         Schema::dropIfExists('advertisements');
     }
 };

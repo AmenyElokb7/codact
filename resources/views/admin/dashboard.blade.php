@@ -124,10 +124,8 @@
                         </div>
                     </div>
                     <div class="dropdown d-inline-block">
-                        <div style="color:white;"><span id="datetime"></span></div>
+                        <div style="color:white;top:25px;position:relative"><span id="datetime"></span></div>
                     </div>
-
-
                     <script>
                         function updateDateTime() {
                             const now = new Date();
@@ -141,7 +139,23 @@
                         // Update the datetime every second
                         setInterval(updateDateTime, 1000);
                     </script>
+                    <style>
+                        .noti-dot {
+                            position: relative;
+                        }
 
+                        .noti-count {
+                            position: absolute;
+                            top: -6px;
+                            right: -4px;
+                            padding: 2px 4px;
+                            border-radius: 50%;
+                            background-color: #ff0000;
+                            color: #ffffff;
+                            font-size: 9px;
+                            line-height: 1;
+                        }
+                    </style>
                     <div class="dropdown d-none d-lg-inline-block ms-1">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             data-toggle="fullscreen">
@@ -152,8 +166,11 @@
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="ri-notification-3-line"></i>
-                            <span class="noti-dot"></span>
+                            <span class="noti-dot">
+                                <span class="noti-count">{{ $notifications->total() }}</span>
+                            </span>
                         </button>
+
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
                             <div class="p-3">
@@ -162,7 +179,7 @@
                                         <h6 class="m-0">Notifications</h6>
                                     </div>
                                     <div class="col-auto">
-                                        <a href="#!" class="small">View All</a>
+                                        <a href="{{ route('notifications') }}" class="small">View All</a>
                                     </div>
                                 </div>
                             </div>
@@ -189,13 +206,83 @@
                             </div>
                             <div class="p-2 border-top">
                                 <div class="d-grid">
-                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center"
+                                        href="{{ route('notifications') }}">
                                         <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <style>
+                        .btnNotif {
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        .avatar-with-initial {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            background-color: #cccccc;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin-right: 10px;
+                        }
+
+                        .avatar-initial {
+                            font-size: 18px;
+                            font-weight: bold;
+                            color: #ffffff;
+                        }
+
+                        .user-details {
+                            display: flex;
+                            flex-direction: column;
+                        }
+
+                        .user-name {
+                            margin-top: 3px;
+                        }
+                    </style>
+                    <?php
+                    $userName = Auth::user()->name;
+                    $avatarUrl = 'assets/images/users/avatar-1.jpg';
+                    $firstLetter = strtoupper(substr($userName, 0, 1));
+                    ?>
+
+                    <div class="dropdown d-inline-block user-dropdown">
+                        <button type="button" class="btn header-item waves-effect btnNotif"
+                            id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <div class="avatar-with-initial">
+                                <div class="avatar-initial">
+                                    <?php echo $firstLetter; ?>
+                                </div>
+                            </div>
+                            <span class="user-name d-none d-xl-inline-block me-2">{{ Auth::user()->name }}</span>
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <!-- item-->
+                            <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i>
+                                Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                      document.getElementById('logout-form').submit();"><i
+                                    class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    </div>
+
+
 
 
                 </div>
@@ -218,21 +305,21 @@
                         {{-- Publisher Navbar --}}
                         @if (Auth::user()->hasRole('publisher'))
                             <li>
-                            <li><a href="{{ route('PublisherCafe') }}" ><i class="fas fa-coffee"> </i><span>Cafes</span></a></li>
+                            <li><a href="{{ route('PublisherCafe') }}"><i class="fas fa-coffee">
+                                    </i><span>Cafes</span></a></li>
                             <li><a href="{{ route('PublisherAds') }}"><i class="fas fa-list"> </i>Ads List</a></li>
                             <a class="btn btn-primary ms-5" style="color: white" href="{{ route('NewAd') }}">Create
                                 new ad <span> <i class="fas fa-plus" style="color: white;"></i></span></a></li>
 
                             <li>
 
-                            <li><a href="{{ route('pendingAd') }}"><i
-                                        class="fas fa-user-alt"></i>{{ Auth::User()->name }}'s profile</a></li>
 
                             </li>
                             <li><a href="#"><i class="fas fa-money-bill-alt"></i>Transactions</a></li>
                             </li>
                             </li>
-                            <li><a href="#"><i class="fas fa-bell"></i>Notifications</a></li>
+                            <li><a href="{{ route('notifications') }}"><i class="fas fa-bell"></i>Notifications</a>
+                            </li>
                             </li>
                         @endif
 
@@ -268,66 +355,51 @@
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{{ route('pendingAd') }}">Pending</a></li>
                                     <li><a href="{{ route('approvedAd') }}">Approved</a></li>
-                                    <li><a href="{{ route('History') }}">History</a></li>
+                                    <li><a href="{{ route('History') }}">Rejected</a></li>
 
                                 </ul>
                             </li>
-                            <li><a href="#"><i class="fas fa-list"></i>Categoriers</a></li>
+                            <li><a href="{{ route('admin.categories') }}"><i
+                                        class="fas fa-list"></i><span>Categoriers</span></a></li>
                             </li>
-                            <li><a href="#"><i class="fas fa-bell"></i>Notifications</a></li>
+                            <li><a href="{{ route('notifications') }}"><i
+                                        class="fas fa-bell"></i><span>Notifications</span></a></li>
                             </li>
-                            <li><a href="#"><i class="fas fa-exclamation"></i>Support</a></li>
+
+                            <li><a href="#"><i class="fas fa-money-bill-alt"></i><span>Payment Track</span></a>
                             </li>
-                            <li><a href="#"><i class="fas fa-money-bill-alt"></i>Payment Track</a></li>
                             </li>
-                    
                         @endif
                         {{-- subscriber Navbar --}}
                         @if (Auth::user()->hasRole('subscriber'))
                             <li>
 
-                            <li> <a href="#" class="waves-effect"> <i class="fas fa-tasks"></i><span>Ads List</span></a>
+                            <li> <a href="{{ route('subscriber.ads') }}" class="waves-effect"> <i
+                                        class="fas fa-tasks"></i><span>Ads
+                                        List</span></a>
+                            </li>
+
+                            </li>
+
+                            <li>
+
+                            <li><a href="{{ route('notifications') }}"><i
+                                        class="fas fa-bell"></i><span>Notifications</span></a></li>
                             </li>
 
                             </li>
                             <li>
-
-                            <li> <a href="#"><i class="fas fa-user-alt"></i><span>Profile</span></a>
-                            </li>
-
-                            </li>
-                            <li>
-
-                            <li> <a href="#"><i class="fas fa-bell"></i><span>Notifications</span></a>
-                            </li>
-
-                            </li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="fas fa-question-circle"></i>
-                                    <span>Support</span>
+                                <a href="{{ route('ashtrays.show') }}"> <i class="fas fa-question-circle"></i>
+                                    <span>Support</span></a>
                                 </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li> <a href="{{ route('ashtrays.show') }}"><span>Ashtrays List</span></a>
-                                    </li>
-                                    <li><a href="#">Claim</a></li>
-                                </ul>
+
                             </li>
                             <li>
-                            <li><a href="#"><i class="fas fa-money-bill-alt"></i><span>Payment tracking</span></a></li>
+                            <li><a href="#"><i class="fas fa-money-bill-alt"></i><span>Payment
+                                        tracking</span></a></li>
                             </li>
                         @endif
-                        <li>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                          document.getElementById('logout-form').submit();">
-                                <i class="fa fa-sign-out-alt"></i><span>Logout</span>
-                            </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
 
                     </ul>
                 </div>
