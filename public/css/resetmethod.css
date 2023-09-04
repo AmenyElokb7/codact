@@ -1,0 +1,51 @@
+.shadow_card {
+    box-shadow: -4px -2px 7px;
+  }
+  .btn-21{
+    font-family: "Helvetica Neue",Helvetica,Arial !important;
+background-color: #0C82EE;
+    border-radius: 12px !important;
+    height:42px;
+    width:95px;
+ padding: 0px 20px;
+    border: 1px solid #0C82EE;
+}
+.btn-20{
+    font-family: "Helvetica Neue",Helvetica,Arial !important;
+background-color: #9c9c9c;
+    border-radius: 12px !important;
+    height: 42px;
+ padding: 0px 20px;
+ width:95px;
+
+    border: 1px solid #9c9c9c;
+}
+.width_card{
+    width:30%;
+}
+
+@media screen and (min-width: 900px) and (max-width: 1250px){
+    .width_card{
+        width:40%;
+    }
+}
+@media screen and (min-width: 700px) and (max-width: 900px){
+    .width_card{
+        width:55%;
+    }
+}
+@media screen and (min-width: 550px) and (max-width: 700px){
+    .width_card{
+        width:65%;
+    }
+}
+@media screen and (min-width: 450px) and (max-width: 550px){
+    .width_card{
+        width:80%;
+    }
+}
+@media screen and (min-width: 250px) and (max-width: 450px){
+    .width_card{
+        width:90%;
+    }
+}

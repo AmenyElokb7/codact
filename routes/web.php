@@ -16,11 +16,59 @@ use App\Http\Controllers\PermissionController;
 Route::get('/', function () {
     return view('welcome');
 });
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');;
+Route::get('/cafe', function () {
+    return view('design');
+});
 
+// Define the API endpoint to send the picture URL to ESP32
+Route::post('/send-picture-url', 'ESP32Controller@sendPictureURL');
+Route::post( '/deleteUser' , [App\Http\Controllers\pagesController:: class , 'deleteUser' ])->middleware( 'web' ); 
+
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+    Route::get('/resetmethod', function () {
+        return view('auth/resetmethod');
+    });
+    Route::get('/forgetpasswordsms', function () {
+        $phone="";
+        return view('auth/forgetpasswordsms',compact('phone'));
+    });
+    Route::get('/setnewpassword/{link}',  [App\Http\Controllers\pagesController::class, 'showsetnewpassword'])->name('showsetnewpassword');
+
+    Route::post('/newpassword', [App\Http\Controllers\pagesController::class, 'Setnewpassword'])->name('newpassword');
+
+    Route::post('/sendsms', [App\Http\Controllers\pagesController::class, 'sendsms'])->name('sendsms');
+    Route::post('/methodreset', [App\Http\Controllers\pagesController::class, 'methodreset'])->name('methodreset');
+
+    Route::get('/forgetpassword', function () {
+        $email="";
+        return view('auth/forgetpassword',compact('email'));
+    });
+    Route::post('/sendemail', [App\Http\Controllers\pagesController::class, 'sendEmail'])->name('sendemail');
+    Route::get('/checkkey', [App\Http\Controllers\pagesController::class, 'showcheckkey'])->name('checkkey');
+    Route::post('/postcheckkey', [App\Http\Controllers\pagesController::class, 'checkKey'])->name('postcheckkey');
 // Admin Routes
+Route::middleware(['auth', 'user-role:publisher,admin'])->group(function() {
+    Route::get('/EditProfile', [App\Http\Controllers\pagesController::class,'EditProfile'])->name('EditProfile');
+    Route::post('/user/{user}', [App\Http\Controllers\pagesController::class,'updateprofile'])->name('updateprofile');
+    });
 Route::middleware(['auth','user-role:admin'])->group(function()
 {
+
+// transaction
+Route::get('/Historic', [App\Http\Controllers\pagesController::class,'hisorictransaction'])->name('hisorictransaction');
+Route::get('/sendmoney', [App\Http\Controllers\pagesController::class, 'sendmoney'])->name('sendmoney');
+Route::post('/sendtouser', [App\Http\Controllers\pagesController::class, 'sendtouser'])->name('sendtouser');
+Route::get('/approvedtransaction', [App\Http\Controllers\pagesController::class, 'approvedtransaction'])->name('approvedtransaction');
+Route::get('/acceptedtransaction', [App\Http\Controllers\pagesController::class, 'acceptedtransaction'])->name('acceptedtransaction');
+Route::get('/pendingtransaction', [App\Http\Controllers\pagesController::class, 'pendingtransaction'])->name('pendingtransaction');
+Route::post('/rejectofflinetransaction', [App\Http\Controllers\pagesController::class, 'rejectofflinetransaction'])->name('rejectofflinetransaction');
+Route::post('/sendtouserfromoffline', [App\Http\Controllers\pagesController::class, 'sendtouserfromoffline'])->name('sendtouserfromoffline');
+Route::get('/offlinetransaction', [App\Http\Controllers\pagesController::class, 'offlinet_transaction'])->name('offlinet_transaction');
+Route::get('/Transaction', [App\Http\Controllers\pagesController::class,'adminTransactions'])->name('adminTransactions');
+// *****************
+
+
+
     Route::get('/publisher', [App\Http\Controllers\pagesController::class, 'publisher'])->name('publisher');
     Route::get('/subscriber', [App\Http\Controllers\pagesController::class, 'subscriber'])->name('subscriber');
     Route::get('/pendingAd', [App\Http\Controllers\pagesController::class, 'PendingAd'])->name('pendingAd');
@@ -41,7 +89,7 @@ Route::middleware(['auth','user-role:admin'])->group(function()
     Route::post('/categoryCreate', 'App\Http\Controllers\adminController@createCategory')->name('admin.category.create');
     Route::get('/categories/{category}/edit', 'App\Http\Controllers\adminController@editCategory')->name('categories.edit');
     Route::delete('/categories/{category}', 'App\Http\Controllers\adminController@destroyCategory')->name('categories.destroy');
- 
+    
 // Roles
     Route::get('/roles', [RoleController::class, 'index'])->name('admin.roles.index');
     Route::get('/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
@@ -68,8 +116,21 @@ Route::middleware(['auth','user-role:publisher'])->group(function()
     Route::post("/createAd", [App\Http\Controllers\adminController::class, 'createAd'])->name('createAd');
     Route::get('/get-category', [App\Http\Controllers\adminController::class,'getCategory']);
     Route::get('/filtered-ads', 'App\Http\Controllers\adminController@filteredAds')->name('filteredAds');
+    Route::get('/coffe', [App\Http\Controllers\pagesController::class, 'showpreview'])->name('showpreview');
 
-    
+    Route::get('/Financalsummary', [App\Http\Controllers\pagesController::class, 'Financalsummary'])->name('Financalsummary');
+    Route::get('/payads', [App\Http\Controllers\pagesController::class, 'payads'])->name('payads');
+    Route::get('/Transactions', [App\Http\Controllers\pagesController::class,'Transactions'])->name('Transactions');
+    Route::post('/transactionoffline', [App\Http\Controllers\pagesController::class, 'transaction_offline'])->name('transaction_offline');
+    Route::post('/sendpayment', [App\Http\Controllers\pagesController::class, 'sendpayment'])->name('sendpayment');
+    Route::get('/Transactions', [App\Http\Controllers\pagesController::class,'Transactions'])->name('Transactions');
+    Route :: post( '/deleteofflinetransaction' , [App\Http\Controllers\pagesController :: class , 'deleteofflinetransaction' ])->name( 'deleteofflinetransaction' );
+    Route ::get( '/editofflinetransaction/{id}' , [App\Http\Controllers\pagesController:: class , 'editofflinetransaction' ])->name( 'editofflinetransaction' );
+    Route::post('/editing_transaction_offline/{id}', [App\Http\Controllers\PagesController::class, 'editing_transaction_offline'])->name('editing_transaction_offline');
+    Route::get('/publisher/payads', [App\Http\Controllers\pagesController::class, 'publisherpayads'])->name('publisherpayads');
+    Route::post('/publisher/checkout', [App\Http\Controllers\pagesController::class,'processCheckout'])->name('processCheckout');
+    Route::delete('/ads/{id}', [App\Http\Controllers\pagesController::class, 'destroy'])->name('ads.destroy');
+
 });
 
 // Subscriber Routes

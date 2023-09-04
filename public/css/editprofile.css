@@ -1,0 +1,28 @@
+.boutton-edit {
+    width: 180px;
+    height: 45px;
+    color: black;
+    font-size: 19px;
+    font-weight: 400;
+    background: rgb(24, 54, 178);
+    color: white;
+    border-radius: 20px;
+}
+
+@media screen and (max-width:575px){
+   
+    .little_checkbox {
+        width:100% !important
+    }
+    
+    }
+    #profileImage {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: grey;
+        font-size: 40px;
+        color: #fff;
+        text-align: center;
+        line-height: 92px;
+      }

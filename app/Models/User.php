@@ -35,6 +35,7 @@ class User extends Authenticatable
         'Besttime',
         'tablesno',
         'image',
+        'balance',
         'password',
     ];
     public function category()
@@ -75,4 +76,19 @@ public function hasRole($roleName)
 {
     return $this->hasMany(Advertisement::class, 'user_id');
 }
+public function passwordReset()
+{
+    return $this->hasOne(PasswordReset::class);
+}
+public function deductBalance($amount)
+    {
+        if ($this->balance >= $amount) {
+            $this->balance -= $amount;
+            $this->save();
+
+            return true;
+        }
+
+        return false; // Insufficient balance
+    }
 }

@@ -16,6 +16,7 @@ class Advertisement extends Model
         'period',
         'cost',
         'status',
+        'pdf',
     ];
 
     public function user()

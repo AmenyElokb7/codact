@@ -22,6 +22,25 @@
                     display: table-cell !important;
                     font-size: 12px !important;
                 }
+
+                .custom-datatable-buttons .btn {
+                    background-color: #3366cc;
+                    color: #ffffff;
+                    border-color: #3366cc;
+                }
+
+                .custom-datatable-buttons .btn-group {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+
+                .custom-datatable-buttons .btn-group .dropdown-menu {
+                    background-color: #3366cc;
+                }
+
+                .custom-datatable-buttons .btn-group .dropdown-item {
+                    color: #ffffff;
+                }
             </style>
             <!-- end page title -->
             <div class="row">
@@ -33,7 +52,7 @@
                                 Add</button>
                             <br><br>
                             <table id=>
-                                <table id="datatable" class="table table-striped table-bordered dt-responsive"
+                                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive"
                                     style="border-collapse: collapse; border-spacing: 1; width: 100%;">
                                     <thead>
                                         <tr>
@@ -280,3 +299,40 @@
         </div>
     </div>
 @endsection
+
+<script type="text/javascript">
+$(document).ready(function() {
+   $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+    var table = $('#product-dataTable12').DataTable({
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+     dom: 'lBfrtip',
+     responsive: true,
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 5 ]
+                }
+            },
+            'colvis'
+        ]
+    });   
+  });
+</script>
+

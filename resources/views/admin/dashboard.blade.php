@@ -55,7 +55,7 @@
         rel="stylesheet">
 </head>
 
-<body data-topbar="dark">
+<body data-topbar="light"   >
     <!-- <body data-layout="horizontal" data-topbar="dark"> -->
     <!-- Begin page -->
     <div id="layout-wrapper">
@@ -66,25 +66,25 @@
                     <div class="navbar-brand-box">
                         <a href="{{ url('/') }}" class="logo logo-dark">
                             <span class="logo-sm">
-                                <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm"
-                                    height="22">
+                                {{-- <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm"
+                                    height="22"> --}}
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('backend/assets/images/logo-light.png') }}" alt="logo-light"
-                                    height="20">
+                                {{-- <img src="{{ asset('backend/assets/images/logo-light.png') }}" alt="logo-light"
+                                    height="20"> --}}
                             </span>
                         </a>
                         <a href="{{ url('/') }}" class="logo logo-light">
                             <span class="logo-sm">
-                                <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm-light"
-                                    height="30">
+                                {{-- <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm-light"
+                                    height="30"> --}}
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm-light"
-                                    height="40">
+                                {{-- <img src="{{ asset('backend/assets/images/logo-sm.png') }}" alt="logo-sm-light"
+                                    height="40"> --}}
                                 &nbsp;
-                                <img src="{{ asset('backend/assets/images/image.png') }}" alt="logo-light"
-                                    height="40">
+                                {{-- <img src="{{ asset('backend/assets/images/image.png') }}" alt="logo-light"
+                                    height="40"> --}}
                             </span>
                         </a>
                     </div>
@@ -123,8 +123,46 @@
                             </form>
                         </div>
                     </div>
+                    @if (Auth::user()->hasRole('publisher'))
+                        <a href="{{ route('Transactions') }}">
+                            <div class="dropdown d-inline-block me-1">
+                                <div style="color:black;"><span style="position: relative; top: 25px">
+                                        <i class="fas fa-wallet"></i>
+                                    </span></div>
+                            </div>
+                            <div class="dropdown d-inline-block me-3">
+                                <div style="color:black;"><span style="position: relative; top: 25px">
+                                        <div>{{ Auth::user()->balance }}<span class='ms-1'>DNT</span></div>
+                                    </span></div>
+                            </div>
+                        </a>
+                    @elseif (Auth::user()->hasRole('admin'))
+                        <a href="{{ route('adminTransactions') }}">
+                            <div class="dropdown d-inline-block me-1">
+                                <div style="color:black;"><span style="position: relative; top: 25px">
+                                        <i class="fas fa-wallet text-dark"></i>
+                                    </span></div>
+                            </div>
+                            <div class="dropdown d-inline-block me-3">
+                                <div style="color:black;"><span style="position: relative; top: 25px">
+                                        <div>{{ Auth::user()->balance }}<span class='ms-1'>DNT</span></div>
+                                    </span></div>
+                            </div>
+                        </a>
+                    @elseif (Auth::user()->hasRole('subscriber'))
+                        <div class="dropdown d-inline-block me-1">
+                            <div style="color:black;"><span style="position: relative; top: 25px">
+                                    <i class="fas fa-wallet"></i>
+                                </span></div>
+                        </div>
+                        <div class="dropdown d-inline-block me-3">
+                            <div style="color:black;"><span style="position: relative; top: 25px">
+                                    <div>{{ Auth::user()->balance }}<span class='ms-1'>DNT</span></div>
+                                </span></div>
+                        </div>
+                    @endif
                     <div class="dropdown d-inline-block">
-                        <div style="color:white;top:25px;position:relative"><span id="datetime"></span></div>
+                        <div style="color:black;top:25px;position:relative"><span id="datetime"></span></div>
                     </div>
                     <script>
                         function updateDateTime() {
@@ -165,7 +203,7 @@
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ri-notification-3-line"></i>
+                            <i class="ri-notification-3-line text-dark"></i>
                             <span class="noti-dot">
                                 <span class="noti-count">{{ $notifications->total() }}</span>
                             </span>
@@ -269,8 +307,11 @@
 
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i>
-                                Profile</a>
+                            @if (Auth::user()->hasRole('publisher') || Auth::user()->hasRole('admin'))
+                                <a class="dropdown-item" href="{{ route('EditProfile') }}"><i
+                                        class="ri-user-line align-middle me-1"></i>
+                                    Profile</a>
+                            @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
@@ -288,14 +329,19 @@
                 </div>
             </div>
         </header>
+        <style>
+            #sidebar-menu li a, i {
+                color: white !important;
+            }
+        </style>
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="vertical-menu">
+        <div class="vertical-menu bg-dark">
             <div data-simplebar class="h-100">
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
                     <!-- Left Menu Start -->
                     <ul class="metismenu list-unstyled" id="side-menu">
-                        <li class="menu-title">Menu</li>
+                        <li class="menu-title text-white">Menu</li>
                         <li>
                             <a href="{{ url('/home') }}" class="waves-effect">
                                 <i class="fas fa-home"></i>
@@ -315,8 +361,17 @@
 
 
                             </li>
-                            <li><a href="#"><i class="fas fa-money-bill-alt"></i>Transactions</a></li>
-                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="fas fa-money-bill-alt"></i>
+                                    <span>Financial</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('Financalsummary') }}">Financial summary</a></li>
+                                    <li><a href="{{ route('payads') }}">Charge account</a></li>
+
+                                </ul>
+                            </li>                            </li>
                             </li>
                             <li><a href="{{ route('notifications') }}"><i class="fas fa-bell"></i>Notifications</a>
                             </li>
@@ -366,7 +421,29 @@
                                         class="fas fa-bell"></i><span>Notifications</span></a></li>
                             </li>
 
-                            <li><a href="#"><i class="fas fa-money-bill-alt"></i><span>Payment Track</span></a>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="fas fa-money-bill-alt"></i>
+                                    <span>Financial</span>
+                                </a>
+
+
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('hisorictransaction') }}">Financial summary</a></li>
+                                    <li><a href="{{ route('sendmoney') }}">Send money</a></li>
+
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="fas fa-money-check-alt"></i> <span>Offline Transaction</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('pendingtransaction') }}">Pending</a></li>
+                                    <li><a href="{{ route('acceptedtransaction') }}">Accepted</a></li>
+                                    <li><a href="{{ route('approvedtransaction') }}">Rejected</a></li>
+
+                                </ul>
                             </li>
                             </li>
                         @endif
@@ -428,8 +505,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
-                                <img src="{{ asset('backend/assets/images/logo-light.png') }}" alt="logo-sm-light"
-                                    height="30">
+                                {{-- <img src="{{ asset('backend/assets/images/logo-light.png') }}" alt="logo-sm-light"
+                                    height="30"> --}}
 
                             </div>
                         </div>

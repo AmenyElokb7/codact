@@ -2,6 +2,7 @@ $(function(){
     $(document).on('click','#delete',function(e){
         e.preventDefault();
         var link = $(this).attr("href");
+        var form = $(this).closest('form');
                   Swal.fire({
                     title: 'Are you sure?',
                     text: "Delete This Data?",
@@ -13,6 +14,7 @@ $(function(){
                   }).then((result) => {
                     if (result.isConfirmed) {
                       window.location.href = link
+                      form.submit(); 
                       Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',

@@ -80,18 +80,22 @@
                                                         <span class="badge bg-danger text-light">{{ $ad->status }}</span>
                                                     </td>
                                                 @endif
+                                                <div class="btn-group">
                                                 <td style="white-space:nowrap">
-                                                    <a id="Edit" class="btn btn-success" {{-- href="subscriber?Edit={{ $subscriber->id }}" name="edit" --}}
-                                                        value="edit" class="settings" title="Settings"
-                                                        data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a {{-- href="{{ route('deleteSubscriber', $subscriber->id) }}"  --}} class="btn btn-danger sm" title="Delete ad"
-                                                        id="delete">
-                                                        <i class="fas fa-trash-alt"></i></a>
+                                                        <form action="{{ route('ads.destroy', ['id' => $ad->id]) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger sm" title="Delete ad" id="delete">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </form>
+                                                        
                                                     <button class="btn btn-primary sm" title="View video"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#videoModal{{ $ad->id }}">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
+                                               
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="videoModal{{ $ad->id }}"
                                                         tabindex="-1" role="dialog"
@@ -109,7 +113,7 @@
                                                                 <div class="modal-body">
                                                                     <div
                                                                         class="embed-responsive embed-responsive-16by9 d-flex justify-content-center align-items-center">
-                                                                        <iframe class="embed-responsive-item"
+                                                                        <iframe class="embed-responsive-item" autoplay="false"
                                                                             src="storage/{{ $ad->video }}"></iframe>
                                                                     </div>
                                                                 </div>
@@ -121,8 +125,10 @@
                                                         </div>
                                                     </div>
                                                 </td>
+                                            </div>
                                         @endforeach
                                         </tr>
+                                        
                                         {{-- @endforeach --}}
 
                                     </tbody>
@@ -418,3 +424,5 @@
         </div>
     </div>
 @endsection
+
+

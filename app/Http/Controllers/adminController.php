@@ -202,60 +202,30 @@ public function resume($id)
 }
 public function createAd(Request $request)
 {
-    $userId = Auth::user()->id; 
-    $videoFile = $request->file('video');
-    $cafeOwnerIds = $request->input('cafeOwnerId');
-    $startdate = $request->input('start');
-    $enddate = $request->input('end');
-    $time = $request->input('time');
-    $period = $request->input('period');
-    $cost = $request->input('cost');
-    
-    $videoPath = $videoFile->store('videos', 'public');
-    
-    $ad = new Advertisement();
-    $ad->user_id = $userId;
-    $ad->video = $videoPath;
-    $ad->startdate = $startdate;
-    $ad->enddate = $enddate;
-    $ad->time = $time;
-    $ad->period = $period;
-    $ad->cost = $cost;
-    $ad->status = 'pending';
-    $ad->save();
+    $notifications = auth()->user()->notifications()->paginate(10);
+    $adFormData = $request->all();
+    $adFormData['videoPath'] = $request->file('video')->store('videos', 'public');
+    unset($adFormData['video']); 
+    $userBalance = Auth::user()->balance;
 
-    $cafeOwnerIdsArray = array_map('intval', explode(',', $cafeOwnerIds));
-
-    $ad->cafeOwners()->sync($cafeOwnerIdsArray);
-      // Notify the admin
-      $adminUser = User::whereHas('roles', function ($query) {
-        $query->where('name', 'admin');
-    })->first();
-
-    $adminNotification = new NewAdNotification($ad);
-    $adminUser->notify($adminNotification);
-
-    // Notify selected subscribers
-    $selectedSubscriberIds = array_unique($cafeOwnerIdsArray); // Remove duplicates
-    $selectedSubscribers = User::whereIn('id', $selectedSubscriberIds)->get();
-
-    $subscriberNotification = new NewAdNotification($ad);
-    Notification::send($selectedSubscribers, $subscriberNotification);
-
-    $notification = array(
-        'message' => 'ad created successfully',
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification);
+    $request->session()->put('adFormData', $adFormData);
+    $cost=$request->input('cost');
+    if ($userBalance >= $cost) {
+    return view('publisher.checkout', compact('notifications','cost','userBalance'));
+} else {
+    return view('publisher.checkout',compact('notifications','cost','userBalance'), ['error' => 'Insufficient balance to create the ad.']);
+}
 }
 public function filteredAds(Request $request)
 {
     $notifications = auth()->user()->notifications()->paginate(10);
     $selectedCategories = $request->input('cafeCategories');
     $selectedAddresses = $request->input('cafeAddresses');
+    $selectedProfession= $request->input('cafeProfession');
                                                                 
     $filteredCafes = User::whereIn('cafeCategory', $selectedCategories)
         ->whereIn('address', $selectedAddresses)
+        ->whereIn('profession', $selectedProfession)
         ->get();
 
     return view('publisher.newAd', compact('filteredCafes','notifications'));
@@ -310,6 +280,14 @@ public function sendNewClaimNotification(Request $request)
     return redirect()->back();
 
 }
+public function newAd(Request $request)
+{
+    $selectedCafeIds = $request->input('cafes', []);
+    $selectedCafes = User::whereIn('id', $selectedCafeIds)->get();
+
+    return view('publisher.newAd')->with('selectedCafes', $selectedCafes);
+}
+
 
 
 

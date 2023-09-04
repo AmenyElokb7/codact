@@ -6,12 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "dompdf/dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
+        "illuminate/mail": "*",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
-        "nesbot/carbon": "^2.68"
+        "nesbot/carbon": "^2.68",
+        "vonage/client": "^4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

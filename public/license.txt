@@ -1,0 +1,11 @@
+Model Information:
+* title:	Outdoor table & chairs
+* source:	https://sketchfab.com/3d-models/outdoor-table-chairs-ba369cd3e497494fabf13accb6b6325e
+* author:	theJamieAnne (https://sketchfab.com/theJamieAnne)
+
+Model License:
+* license type:	CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions must have the same license.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Outdoor table & chairs" (https://sketchfab.com/3d-models/outdoor-table-chairs-ba369cd3e497494fabf13accb6b6325e) by theJamieAnne (https://sketchfab.com/theJamieAnne) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)

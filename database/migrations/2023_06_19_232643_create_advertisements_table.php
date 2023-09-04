@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('period');
             $table->decimal('cost', 8, 2);
             $table->string('status');
+            $table->string('pdf')->nullable();
             $table->timestamps();
         
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

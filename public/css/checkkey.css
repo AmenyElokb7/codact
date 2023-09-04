@@ -1,0 +1,51 @@
+
+.btn-99{
+    font-family: "Helvetica Neue",Helvetica,Arial !important;
+  background-color: #0C82EE;
+    border-radius: 12px !important;
+    height:42px;
+   
+  padding: 0px 20px;
+    border: 1px solid #0C82EE;
+  }
+  
+   .times li {
+      display: inline-block;
+      font-size: 1.5em;
+      list-style-type: none;
+      padding: 1em;
+      text-transform: uppercase;
+    }
+    
+    .times li span {
+      display: block;
+      font-size: 4.5rem;
+    }
+    
+    
+    @media all and (max-width: 768px) {
+      h1 {
+        font-size: calc(1.5rem * var(--smaller));
+      }
+      
+    .times  li {
+        font-size: calc(1.125rem * var(--smaller));
+      }
+      
+    .times  li span {
+        font-size: calc(3.375rem * var(--smaller));
+      }
+    }
+    .card_time{
+      border:1px solid black;
+      border-radius:8px;
+      background:rgb(236, 236, 236);
+    }
+    .btn-20{
+        font-family: "Helvetica Neue",Helvetica,Arial !important;
+    background-color: #9c9c9c;
+        border-radius: 12px !important;
+        height: 42px;
+     padding: 0px 20px;
+        border: 1px solid #9c9c9c;
+    }
